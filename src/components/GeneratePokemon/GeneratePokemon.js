@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image, FlatList } from "react-native";
 import icons from "../Data/PokemonIcons";
+import styles from "../Data/Styles";
 
 export default function App() {
   // State waar de Pokemon in worden opgeslagen
@@ -37,17 +38,15 @@ export default function App() {
           const speciesInfo = await speciesInfoResponse.json();
 
           const backgroundColorData = speciesInfo.color.name; // Haal de kleur op uit de data
-          let backgroundColor
+          let backgroundColor;
 
-          if(backgroundColorData != 'white'){
-            backgroundColor = backgroundColorData
-          }else{
-            backgroundColor = 'lightgrey';
+          if (backgroundColorData != "white") {
+            backgroundColor = backgroundColorData;
+          } else {
+            backgroundColor = "lightgrey";
           }
-          
+
           const healthPoints = pokemonData.stats[0].base_stat; // Haal de healthpoints op uit de data
-
-
 
           const stats = pokemonData.stats;
 
@@ -79,12 +78,12 @@ export default function App() {
           </Text>
         );
       });
-  
-      let iconsToBeRenderd = icons.map((icon) => {
+
+      let iconsToBeRenderd = icons.map((icon, index) => {
         if (typesToBeRenderd[0].key == icon.label) {
           return (
             <View
-              key={icon.label}
+              key={index}
               style={[styles.typeImageCon, { backgroundColor: icon.color }]}
             >
               <Image source={{ uri: icon.svg }} style={styles.typeImage} />
@@ -97,7 +96,7 @@ export default function App() {
         ) {
           return (
             <View
-              key={icon.label}
+              key={index}
               style={[styles.typeImageCon, { backgroundColor: icon.color }]}
             >
               <Image source={{ uri: icon.svg }} style={styles.typeImage} />
@@ -106,26 +105,28 @@ export default function App() {
         }
       });
       return iconsToBeRenderd;
-    }
-
+    };
 
     const retrieveStats = () => {
       let stats = item.stats;
-      let filterdStats = stats.filter((stat=>{
+      let filterdStats = stats.filter((stat) => {
         let statName = stat.stat.name;
-        return statName == 'attack' || statName == 'defense' || statName == 'speed';
-      }));
+        return (
+          statName == "attack" || statName == "defense" || statName == "speed"
+        );
+      });
       let statsToBeRenderd = filterdStats.map((stat) => {
         let statName = stat.stat.name;
         let baseStat = stat.base_stat;
         return (
-          <Text key={statName}>
-            {statName}{baseStat}
-          </Text>
+          <View key={statName}>
+            <Text style={styles.statSingle}>{baseStat}</Text>
+            <Text>{statName}</Text>
+          </View>
         );
       });
       return statsToBeRenderd;
-    }
+    };
 
     return (
       <View style={styles.pokemonCon}>
@@ -138,7 +139,7 @@ export default function App() {
         <Text style={styles.pokemon}>
           {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
         </Text>
-        <Text> {retrieveStats()}</Text>
+        <Text style={styles.statCon}> {retrieveStats()}</Text>
         <Text style={styles.hpContainer}>HP: {item.healthPoints}</Text>
       </View>
     );
@@ -151,61 +152,3 @@ export default function App() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cardCircle: {
-    padding: 150,
-    width: 200,
-    borderRadius: 250,
-    position: "absolute",
-    top: -100,
-    zIndex: -1,
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  hpContainer: {
-    position: "absolute",
-    top: 10,
-    right: 20,
-    backgroundColor: "#FFFFFF",
-    padding: 8,
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderRadius: 50,
-  },
-  typeContainer: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 15,
-  },
-  typeImageCon: {
-    padding: 5,
-    borderRadius: 50,
-  },
-  typeImage: {
-    width: 25,
-    height: 25,
-  },
-  pokemonCon: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    padding: 30,
-  },
-  pokemon: {
-    fontSize: 30,
-    textTransform: "uppercase",
-  },
-  image: {
-    width: 200,
-    height: 200,
-  },
-});
