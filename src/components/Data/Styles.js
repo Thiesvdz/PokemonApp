@@ -4,15 +4,23 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      display: "flex",
       alignItems: "center",
       justifyContent: "center",
     },
+    center: {
+        flexGrow: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
     cardCircle: {
-      padding: 150,
-      width: 200,
-      borderRadius: 250,
+      width: 300,
+      height: 220,
+      borderRadius: 150,
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
       position: "absolute",
-      top: -100,
+      top: 0,
       zIndex: -1,
       flex: 1,
       alignItems: "center",
@@ -39,7 +47,13 @@ const styles = StyleSheet.create({
     },
     statCon: {
       display: "flex",
-      gap: 25,
+      alignItems: "center",
+      flexDirection: "row",
+      gap: 20,
+    },
+    statWrap: {
+      display: "flex",
+      alignItems: "center",
     },
     statSingle: {
       display: "flex",
@@ -47,14 +61,16 @@ const styles = StyleSheet.create({
       alignItems: "center",
       fontSize: 15,
       fontWeight: "bold",
-      marginTop: 5
+      marginTop: 5,
+    },
+    statSingleName: {
+      textTransform: "capitalize",
     },
     typeImage: {
       width: 25,
       height: 25,
     },
     pokemonCon: {
-      flex: 1,
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: "#FFFFFF",

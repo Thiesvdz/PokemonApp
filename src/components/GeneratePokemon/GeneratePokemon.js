@@ -1,30 +1,34 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, FlatList } from "react-native";
-import icons from "../Data/PokemonIcons";
-import styles from "../Data/Styles";
+import { StyleSheet, Text, View, Image, FlatList, Button } from "react-native";
+import { DeviceEventEmitter } from 'react-native';
 
-export default function App() {
+import icons from "../Data/PokemonIcons";
+import styles from "../Data/Styles"; 
+
+export default function GeneratePokemon() {
   // State waar de Pokemon in worden opgeslagen
   const [firstGenPokemon, setfirstGenPokemon] = useState([]);
   const [number, setNumber] = useState(0);
   const [isLoading, setisLoading] = useState(true);
   const [pokemonStats, setpokemonStat] = useState([]);
-
-  // data om met de Pokemon API te connecten
-  const pokemonPath = "https://pokeapi.co/api/v2/";
-  const pokemon = `pokemon?limit=1&offset=${number}`;
-  const firstGen = `${pokemonPath}${pokemon}`;
+  const [sprite,setSprite] = useState(null);
 
   const generateRandomNum = () => {
     const randomNumber = Math.floor(Math.random() * 150) + 1;
     setNumber(randomNumber);
   };
+
   useEffect(() => {
     generateRandomNum();
   }, []);
 
-  useEffect(() => {
+  // data om met de Pokemon API te connecten 
+  const pokemonPath = "https://pokeapi.co/api/v2/";
+  const pokemon = `pokemon?limit=1&offset=${number}`;
+  const firstGen = `${pokemonPath}${pokemon}`;
+
+  useEffect(() => { 
     const fetchFirstGen = async () => {
       setisLoading(true);
       const firstgenPokemonIdsReponse = await fetch(firstGen);
@@ -39,7 +43,6 @@ export default function App() {
 
           const backgroundColorData = speciesInfo.color.name; // Haal de kleur op uit de data
           let backgroundColor;
-
           if (backgroundColorData != "white") {
             backgroundColor = backgroundColorData;
           } else {
@@ -47,9 +50,7 @@ export default function App() {
           }
 
           const healthPoints = pokemonData.stats[0].base_stat; // Haal de healthpoints op uit de data
-
           const stats = pokemonData.stats;
-
           return {
             ...pokemonData,
             healthPoints,
@@ -64,6 +65,14 @@ export default function App() {
   }, [number]);
 
   const renderPokemon = ({ item }) => {
+    setSprite(item.sprites.front_default.toString());
+    // const displayShiny = () => {
+    //   setSprite(item.sprites.front_shiny.toString());
+    //   console.log(sprite);
+    // }
+    // console.log(sprite);
+
+
     const cardStyle = {
       ...styles.cardCircle,
       backgroundColor: item.backgroundColor,
@@ -80,13 +89,13 @@ export default function App() {
       });
 
       let iconsToBeRenderd = icons.map((icon, index) => {
-        if (typesToBeRenderd[0].key == icon.label) {
+        if (typesToBeRenderd[0]?.key == icon.label) {
           return (
             <View
               key={index}
               style={[styles.typeImageCon, { backgroundColor: icon.color }]}
             >
-              <Image source={{ uri: icon.svg }} style={styles.typeImage} />
+              <Image source={icon.png} style={styles.typeImage} />
             </View>
           );
         } else if (
@@ -99,7 +108,7 @@ export default function App() {
               key={index}
               style={[styles.typeImageCon, { backgroundColor: icon.color }]}
             >
-              <Image source={{ uri: icon.svg }} style={styles.typeImage} />
+              <Image source={icon.png} style={styles.typeImage} />
             </View>
           );
         }
@@ -119,11 +128,11 @@ export default function App() {
         let statName = stat.stat.name;
         let baseStat = stat.base_stat;
         return (
-          <View key={statName}>
+          <View key={statName} style={styles.statWrap}>
             <Text style={styles.statSingle}>{baseStat}</Text>
-            <Text>{statName}</Text>
+            <Text style={styles.statSingleName}>{statName}</Text>
           </View>
-        );
+        ); 
       });
       return statsToBeRenderd;
     };
@@ -132,22 +141,36 @@ export default function App() {
       <View style={styles.pokemonCon}>
         <View style={cardStyle}></View>
         <Image
-          source={{ uri: item.sprites.front_default.toString() }}
+          source={{ uri: sprite }}
           style={styles.image}
         />
         <View style={styles.typeContainer}>{retrieveIcons()}</View>
         <Text style={styles.pokemon}>
           {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
         </Text>
-        <Text style={styles.statCon}> {retrieveStats()}</Text>
+        <View style={styles.statCon}>{retrieveStats()}</View>
+        {/* <Button
+        onPress={displayShiny}
+        title="Show shiny version"
+        color="#841584"  /> */}
         <Text style={styles.hpContainer}>HP: {item.healthPoints}</Text>
       </View>
-    );
+    );  
   };
 
   return (
-    <View>
-      <FlatList data={firstGenPokemon} renderItem={renderPokemon}></FlatList>
+    <View style={styles.container}>
+      <FlatList
+        data={firstGenPokemon}
+        renderItem={renderPokemon}
+        contentContainerStyle={styles.center}
+      ></FlatList>
+   
+      <Button
+        onPress={generateRandomNum}
+        title="Generate random pokemon"
+        color="#841584"
+      />
       <StatusBar style="auto" />
     </View>
   );

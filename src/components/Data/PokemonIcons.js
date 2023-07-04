@@ -1,111 +1,94 @@
-import normal from "../../icons/normal.svg";
-import fire from "../../icons/fire.svg";
-import water from "../../icons/water.svg";
-import electric from "../../icons/electric.svg";
-import grass from "../../icons/grass.svg";
-import ice from "../../icons/ice.svg";
-import fighting from "../../icons/fighting.svg";
-import poison from "../../icons/poison.svg";
-import ground from "../../icons/ground.svg";
-import flying from "../../icons/flying.svg";
-import psychic from "../../icons/psychic.svg";
-import bug from "../../icons/bug.svg";
-import rock from "../../icons/rock.svg";
-import ghost from "../../icons/ghost.svg";
-import dragon from "../../icons/dragon.svg";
-import dark from "../../icons/dark.svg";
-import steel from "../../icons/steel.svg";
-import fairy from "../../icons/fairy.svg";
-
 const icons = [
   {
     label: "normal",
-    svg: normal,
-    color: "#A8A77A",
+    png: require("../../icons_png/normal.png"),
+    color: "#A8A77A", 
   },
   {
     label: "fire",
-    svg: fire,
+    png: require("../../icons_png/fire.png"),
     color: "#EE8130",
   },
   {
     label: "water",
-    svg: water,
+    png: require("../../icons_png/water.png"),
     color: "#6390F0",
   },
   {
     label: "electric",
-    svg: electric,
+    png: require("../../icons_png/electric.png"),
     color: "#F7D02C",
   },
-  {
+  {   
     label: "grass",
-    svg: grass,
+    png: require("../../icons_png/grass.png"),
     color: "#7AC74C",
   },
   {
     label: "ice",
-    svg: ice,
+    png: require("../../icons_png/ice.png"),
     color: "#96D9D6",
   },
   {
     label: "fighting",
-    svg: fighting,
+    png: require("../../icons_png/fighting.png"),
+
     color: "#C22E28",
   },
   {
     label: "poison",
-    svg: poison,
+    png: require("../../icons_png/poison.png"),
+    
     color: "#A33EA1",
   },
   {
     label: "ground",
-    svg: ground,
+    png: require("../../icons_png/ground.png"),
     color: "#E2BF65",
   },
   {
     label: "flying",
-    svg: flying,
+    png: require("../../icons_png/flying.png"),
     color: "#A98FF3",
   },
   {
     label: "psychic",
-    svg: psychic,
+    png: require("../../icons_png/psychic.png"),
     color: "#F95587",
   },
   {
     label: "bug",
-    svg: bug,
+    png: require("../../icons_png/bug.png"),
     color: "#A6B91A",
   },
   {
     label: "rock",
-    svg: rock,
+    png: require("../../icons_png/rock.png"),
     color: "#B6A136",
   },
   {
     label: "ghost",
-    svg: ghost,
+    png: require("../../icons_png/ghost.png"),
     color: "#735797",
   },
   {
     label: "dragon",
-    svg: dragon,
+    png: require("../../icons_png/dragon.png"),
     color: "#6F35FC",
   },
   {
     label: "dark",
-    svg: dark,
+    png: require("../../icons_png/dark.png"),
     color: "#705746",
   },
   {
     label: "steel",
-    svg: steel,
+    png: require("../../icons_png/steel.png"),
     color: "#B7B7CE",
   },
   {
     label: "fairy",
-    svg: fairy,
+    png: require("../../icons_png/fairy.png"),
     color: "#D685AD",
   },
 ];
