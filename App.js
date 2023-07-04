@@ -1,72 +1,30 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, FlatList } from "react-native";
+  
+import { ImageBackground,StyleSheet, Text, View, Image, FlatList } from "react-native";
+import GeneratePokemon from "./src/components/GeneratePokemon/GeneratePokemon";
+import background from "./src/images/pokemon_bg.jpg";
 
+const image = background;
 
 export default function App() {
-  // State waar de Pokemon in worden opgeslagen
-  const [firstGenPokemon, setfirstGenPokemon] = useState([]);
-  const [number, setNumber] = useState(0);
-
-  // data om met de Pokemon API te connecten
-  const pokemonPath = "https://pokeapi.co/api/v2/";
-  const pokemon = `pokemon?limit=1&offset=${number}`;
-  const firstGen = `${pokemonPath}${pokemon}`;
-
-  const generateRandomNum = () => {
-    const randomNumber = Math.floor(Math.random() * 151) + 1;
-    setNumber(randomNumber);
-  };
-  useEffect(() => {
-    generateRandomNum();
-  }, []);
-  
-  useEffect(() => {
-    const fetchFirstGen = async () => {
-      const firstgenPokemonIdsReponse = await fetch(firstGen);
-      const firstgenPokemonIdsBody = await firstgenPokemonIdsReponse.json();
-
-      const firstgenPokemonInfo = await Promise.all(
-        firstgenPokemonIdsBody.results.map(async (p) => {
-          const pInfo = await fetch(p.url, pInfo);
-          console.log(p.url);
-          return pInfo.json();
-        })
-      );
-      setfirstGenPokemon(firstgenPokemonInfo);
-    };
-    fetchFirstGen();
-  }, [number]);
-
-  const renderPokemon = ({ item }) => {
-    return (
-      <View style={styles.pokemonCon}>
-        <Image
-          source={{ uri: item.sprites.front_default }}
-          style={styles.image}
-        />
-        <Text style={styles.pokemon}>
-          {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
-        </Text>
-      </View>
-    );
-  };
-
   return (
+    <ImageBackground source={image} resizeMode="cover" style={styles.imageBackground}>
+
     <View style={styles.container}>
-      <FlatList data={firstGenPokemon} renderItem={renderPokemon}></FlatList>
+      <GeneratePokemon/>
       <StatusBar style="auto" />
     </View>
+    </ImageBackground>
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fafafa",
-    marginTop: 50,
-    // alignItems: "center",
-    // justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   pokemonCon: {
     flex: 1,
@@ -83,5 +41,10 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
+  },
+  imageBackground: {
+    flex: 1,
+    resizeMode: "cover",
+    alignSelf: 'stretch',
   },
 });
