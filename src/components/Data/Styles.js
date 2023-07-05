@@ -36,6 +36,25 @@ const styles = StyleSheet.create({
       paddingRight: 15,
       borderRadius: 50,
     },
+    idContainer: {
+      position: "absolute",
+      top: 10,
+      left: 20,
+      backgroundColor: "#FFFFFF",
+      padding: 8,
+      paddingLeft: 15,
+      paddingRight: 15,
+      borderRadius: 50,
+    },
+    spriteStatus: {
+      position: "absolute",
+      top: -35,
+      left: 0,
+      backgroundColor: "#FFF",
+      padding: 8,
+      paddingLeft: 15,
+      paddingRight: 15,
+    },
     typeContainer: {
       display: "flex",
       flexDirection: "row",
@@ -84,6 +103,11 @@ const styles = StyleSheet.create({
     image: {
       width: 200,
       height: 200,
+    },
+    warning: {
+      backgroundColor: "red",
+      textAlign: "center",
+      color: "#FFF",
     },
   });
 export default styles;  

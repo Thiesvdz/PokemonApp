@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, FlatList, Button } from "react-native";
-import { DeviceEventEmitter } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, Button,Pressable } from "react-native";
+import {useNetInfo} from "@react-native-community/netinfo";
 
 import icons from "../Data/PokemonIcons";
 import styles from "../Data/Styles"; 
@@ -10,27 +10,40 @@ export default function GeneratePokemon() {
   // State waar de Pokemon in worden opgeslagen
   const [firstGenPokemon, setfirstGenPokemon] = useState([]);
   const [number, setNumber] = useState(0);
-  const [isLoading, setisLoading] = useState(true);
-  const [pokemonStats, setpokemonStat] = useState([]);
-  const [sprite,setSprite] = useState(null);
+  const [sprite, setSprite] = useState("Normal");
+  const [isConnected, setisConnected] = useState(false);
+  
+  // const [isLoading, setisLoading] = useState(true);
+  // const [pokemonStats, setpokemonStat] = useState([]);
+
+  // const [{ x, y, z }, setData] = useState({ x: 0, y: 0, z: 0 });
+
+  // const test = {x,y,z};
+  // useEffect(() => {
+  //   const shakeListener = Accelerometer.addListener(setData);
+  //   generateRandomNum();
+  //   console.log("shake");
+  //   return () => shakeListener.remove();
+  // }, [setData]);
 
   const generateRandomNum = () => {
     const randomNumber = Math.floor(Math.random() * 150) + 1;
     setNumber(randomNumber);
+    setSprite("Normal");
   };
 
   useEffect(() => {
     generateRandomNum();
   }, []);
 
-  // data om met de Pokemon API te connecten 
+
+  // data om met de Pokemon API te connecten
   const pokemonPath = "https://pokeapi.co/api/v2/";
   const pokemon = `pokemon?limit=1&offset=${number}`;
   const firstGen = `${pokemonPath}${pokemon}`;
 
-  useEffect(() => { 
+  useEffect(() => {
     const fetchFirstGen = async () => {
-      setisLoading(true);
       const firstgenPokemonIdsReponse = await fetch(firstGen);
       const firstgenPokemonIdsBody = await firstgenPokemonIdsReponse.json();
 
@@ -51,11 +64,13 @@ export default function GeneratePokemon() {
 
           const healthPoints = pokemonData.stats[0].base_stat; // Haal de healthpoints op uit de data
           const stats = pokemonData.stats;
+          const pokemonId = pokemonData.id;
           return {
             ...pokemonData,
             healthPoints,
             backgroundColor,
             stats,
+            pokemonId,
           };
         })
       );
@@ -64,15 +79,12 @@ export default function GeneratePokemon() {
     fetchFirstGen();
   }, [number]);
 
+  const displayShiny = () => {
+    setSprite(sprite === "Normal" ? "Shiny" : "Normal");
+  };
+
   const renderPokemon = ({ item }) => {
-    setSprite(item.sprites.front_default.toString());
-    // const displayShiny = () => {
-    //   setSprite(item.sprites.front_shiny.toString());
-    //   console.log(sprite);
-    // }
-    // console.log(sprite);
-
-
+    const spriteUri = sprite === "Normal" ? item.sprites.front_default : item.sprites.front_shiny;
     const cardStyle = {
       ...styles.cardCircle,
       backgroundColor: item.backgroundColor,
@@ -132,7 +144,7 @@ export default function GeneratePokemon() {
             <Text style={styles.statSingle}>{baseStat}</Text>
             <Text style={styles.statSingleName}>{statName}</Text>
           </View>
-        ); 
+        );
       });
       return statsToBeRenderd;
     };
@@ -140,22 +152,19 @@ export default function GeneratePokemon() {
     return (
       <View style={styles.pokemonCon}>
         <View style={cardStyle}></View>
-        <Image
-          source={{ uri: sprite }}
-          style={styles.image}
-        />
+        <Pressable onPress={displayShiny}>
+          <Image source={{ uri: spriteUri }} style={styles.image} />
+        </Pressable>
         <View style={styles.typeContainer}>{retrieveIcons()}</View>
         <Text style={styles.pokemon}>
           {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
         </Text>
         <View style={styles.statCon}>{retrieveStats()}</View>
-        {/* <Button
-        onPress={displayShiny}
-        title="Show shiny version"
-        color="#841584"  /> */}
         <Text style={styles.hpContainer}>HP: {item.healthPoints}</Text>
+        <Text style={styles.spriteStatus}>Sprite: {sprite}</Text>
+        <Text style={styles.idContainer}>#{item.pokemonId}</Text>
       </View>
-    );  
+    );
   };
 
   return (
@@ -165,7 +174,6 @@ export default function GeneratePokemon() {
         renderItem={renderPokemon}
         contentContainerStyle={styles.center}
       ></FlatList>
-   
       <Button
         onPress={generateRandomNum}
         title="Generate random pokemon"
