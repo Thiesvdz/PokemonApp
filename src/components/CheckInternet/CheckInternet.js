@@ -15,7 +15,7 @@ export default function CheckInternet () {
   return (
     <View>
       {!isConnected && (
-        <Text style={styles.warning}>You are not connected to internet, connect to internet use this app</Text>
+        <Text style={styles.warning}>You are not connected to the internet, connect to the internet use this app</Text>
       )}
     </View> 
   ); 

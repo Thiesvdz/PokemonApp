@@ -20,7 +20,10 @@
     "react-native": "0.71.8",
     "react-native-sensors": "^7.3.6",
     "react-native-shake": "^5.4.0",
-    "react-native-web": "~0.18.10"
+    "react-native-shake-event": "^4.0.1",
+    "react-native-share": "^9.2.0",
+    "react-native-web": "~0.18.10",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
