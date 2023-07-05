@@ -5,14 +5,12 @@ import styles from "../Data/Styles";
 
 export default function CheckInternet () {
   const netInfo = useNetInfo();
-  
+  const [isConnected, setisConnected] = useState(false);
   
   useEffect(() => {
     setisConnected(netInfo.isConnected);
   }, [netInfo.isConnected])
   
-  const [isConnected, setisConnected] = useState(false);
-
 
   return (
     <View>

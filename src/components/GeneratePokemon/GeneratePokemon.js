@@ -1,7 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, FlatList, Button,Pressable } from "react-native";
-import {useNetInfo} from "@react-native-community/netinfo";
+import { Alert, Share, Text, View, Image, FlatList, Button, Pressable } from "react-native";
 
 import icons from "../Data/PokemonIcons";
 import styles from "../Data/Styles"; 
@@ -25,6 +24,7 @@ export default function GeneratePokemon() {
   //   console.log("shake");
   //   return () => shakeListener.remove();
   // }, [setData]);
+  
 
   const generateRandomNum = () => {
     const randomNumber = Math.floor(Math.random() * 150) + 1;
@@ -85,10 +85,26 @@ export default function GeneratePokemon() {
 
   const renderPokemon = ({ item }) => {
     const spriteUri = sprite === "Normal" ? item.sprites.front_default : item.sprites.front_shiny;
+
     const cardStyle = {
       ...styles.cardCircle,
       backgroundColor: item.backgroundColor,
     };
+
+    console.log(spriteUri);
+    const onShare = async () => {
+      try {
+        const result = await Share.share({
+          // Url werkt blijkbaar alleen voor IOS en niet voor Android
+          url: spriteUri,
+          message: `Check out this cool pokemon, his name is ${item.name.charAt(0).toUpperCase() + item.name.slice(1)}!`,
+          title: "Shared pokemon"
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
 
     const retrieveIcons = () => {
       const types = item.types;
@@ -161,8 +177,11 @@ export default function GeneratePokemon() {
         </Text>
         <View style={styles.statCon}>{retrieveStats()}</View>
         <Text style={styles.hpContainer}>HP: {item.healthPoints}</Text>
-        <Text style={styles.spriteStatus}>Sprite: {sprite}</Text>
+        <Text style={styles.spriteStatus}>{sprite}</Text>
         <Text style={styles.idContainer}>#{item.pokemonId}</Text>
+        <View style={{marginTop: 10}}>
+          <Button onPress={onShare} title="Share" />
+        </View>
       </View>
     );
   };
@@ -179,6 +198,7 @@ export default function GeneratePokemon() {
         title="Generate random pokemon"
         color="#841584"
       />
+     
       <StatusBar style="auto" />
     </View>
   );
